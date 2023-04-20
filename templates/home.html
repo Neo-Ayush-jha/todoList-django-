@@ -1,0 +1,48 @@
+{% extends 'base.html'%} {% block 'content' %}{%load crispy_forms_tags%}
+<div class="container-fluid">
+    <div class="row">
+        <h1 class="display-1 text-center mb-5">My Todo list page</h1>
+        <div class="col-xl-4 col-sm-6 mx-auto mb-5 ">
+            <h1 class="display-3">Create list</h1>
+            <form action="" method="post">
+                {%csrf_token%}
+                <div id="div_id_message" class="mb-3">
+                    <label for="id_message" class="form-label"> Message </label>
+                    <input type="text" name="message" maxlength="300" class="textinput form-control" id="id_message" />
+                </div>
+                <div id="div_id_end_at" class="mb-3">
+                    <label for="id_end_at" class="form-label requiredField">
+                        End at<span class="asteriskField">*</span>
+                    </label>
+                    <input type="datetime-local" name="end_at" class="datetimeinput form-control" required=""
+                        id="id_end_at" />
+                </div>
+                <input type="submit" value="Add in list" class="btn btn-success w-100" />
+            </form>
+        </div>
+        <div class="col-xl-8 col-sm-8 mx-auto mb-5 ">
+            <h1 class="display-3">List</h1>
+            <table class="table mt-4">
+                <tr>
+                    <th class="border">No.</th>
+                    <th class="border">Message</th>
+                    <th class="border">Time</th>
+                    <th class="border">Action</th>
+                </tr>
+                {% for mess in message %}
+
+                {% if mess.user.id == us.id %}
+
+
+                <tr>
+                    <td class="border">{{forloop.counter}}</td>
+                    <td class="border">{{mess.message}}</td>
+                    <td class="border">{{mess.end_at}}</td>
+                    <td class="border"><a href="{%url 'delete' mess.id %}" class="btn btn-danger">X</a></td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    {% endblock %}
