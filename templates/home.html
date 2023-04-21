@@ -27,6 +27,7 @@
                     <th class="border">No.</th>
                     <th class="border">Message</th>
                     <th class="border">Time</th>
+                    <th class="border">TimeEnd</th>
                     <th class="border">Action</th>
                 </tr>
                 {% for mess in message %}
@@ -37,6 +38,7 @@
                 <tr>
                     <td class="border">{{forloop.counter}}</td>
                     <td class="border">{{mess.message}}</td>
+                    <td class="border">{{mess.created_at}}</td>
                     <td class="border">{{mess.end_at}}</td>
                     <td class="border"><a href="{%url 'delete' mess.id %}" class="btn btn-danger">X</a></td>
                 </tr>

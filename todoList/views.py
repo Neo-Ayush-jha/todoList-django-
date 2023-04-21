@@ -8,6 +8,9 @@ from django.contrib.auth.hashers import make_password
 from django.core.mail import send_mail
 from .decorators import *
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from django.urls import reverse
+
 
 class SingupView(CreateView):
     model=User
@@ -41,17 +44,20 @@ def homeView(req):
         "message":Message.objects.all()
     }
     if req.method =="POST":
+        link_url = 'http://127.0.0.1:8000' + reverse(homeView)
         if form.is_valid():
             p=form.save(commit=False)
             p.user=req.user
+            p.created_at=timezone.now()
+            p.save()
+            html_message = '<p>{{user.username}}</p><br/><p>Click <a href="{}">here</a> to go to the website.</p>'.format(link_url)
             send_mail(
-                'New message from your website',
-                f'Name: {p.user.username}\nEmail: {p.user.email}\nMessage: {p.message}\nEnd-Time:{p.end_at}',
+                'New message from your todo list',
+                f'Name: {p.user.username}\nEmail: {p.user.email}\nMessage: {p.message}\nStarting-Time:{p.created_at},\nEnd-Time:{p.end_at}\nLink:{link_url}',
                 p.user.email,
-                ['68236e602c2ac1'],  # Replace with your email address
+                ['45636cd9b09dda'], html_message=html_message,
                 fail_silently=False,
             )
-            p.save()
             return redirect(homeView)
     return render(req,"home.html",data)
 
